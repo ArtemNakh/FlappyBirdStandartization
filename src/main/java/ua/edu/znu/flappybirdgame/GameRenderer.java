@@ -1,4 +1,4 @@
-package ua.edu.znu.flappybirdGame;
+package ua.edu.znu.flappybirdgame;
 
 import java.awt.Graphics;
 import javax.swing.JPanel;
