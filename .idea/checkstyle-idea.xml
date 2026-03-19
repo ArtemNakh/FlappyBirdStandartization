@@ -10,7 +10,15 @@
     </option>
     <option name="locations">
       <list>
-        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">
+          (bundled)
+          <option name="properties">
+            <map>
+              <entry key="org.checkstyle.sun.suppressionfilter.config" value="checkstyle-suppressions.xml" />
+              <entry key="org.checkstyle.sun.suppressionxpathfilter.config" value="checkstyle-xpath-suppressions.xml" />
+            </map>
+          </option>
+        </ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="e9c06176-eff6-4294-b0e8-361759b398e3" type="LOCAL_FILE" scope="All" description="my_sheck_sun">
           C:\Users\artem\OneDrive\Desktop\зну\8 семестр\Стандартизація та якість пз\Lab 2\FlappyBird\src\sun_checks.xml

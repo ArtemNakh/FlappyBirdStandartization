@@ -159,7 +159,7 @@ public class FlappyBirdGame
      *
      * @return поточний екземпляр гри
      */
-    public FlappyBirdGame getGameInstance() {
+    public static FlappyBirdGame getGameInstance() {
         return gameInstance;
     }
 
