@@ -3,6 +3,8 @@
  */
 package ua.edu.znu.flappybirdgame;
 
+
+
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
@@ -18,6 +20,8 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
+
+
 
 /**
  * Клас {@code FlappyBirdGame} реалізує основну логіку гри Flappy Bird.
@@ -173,53 +177,77 @@ public class FlappyBirdGame
     }
 
 
+
     /**
      * Додає нові труби у гру.
      *
      * @param isStartingGame якщо {@code true},
-     *                       труби додаються для початкової сцени
-     *                       якщо {@code false}, додаються після проходження.
+     *                      труби додаються для початкової сцени
      */
     private void addPipe(final boolean isStartingGame) {
-        // Відстань між верхньою та нижньою трубою
-        final int pipeGAP = 300;
-        final int pipeWIDTH = 100;            // Ширина труби
-        final int pipeMinHEIGHT = 50;        // Мінімальна висота труби
-        final int pipeMaxRandomHeight = 300; // Додаткова випадкова висота
-        final int groundHeight = 120;         // Висота землі
-        // Відстань між трубами при старті
-        final int pipeDistance = 300;
-        // Відстань між трубами після старту
-        final int pipeDistanceAfter = 600;
-
-        int pipeHeight = pipeMinHEIGHT
-                + randomGenerator.nextInt(pipeMaxRandomHeight);
+        int pipeHeight = generatePipeHeight();
 
         if (isStartingGame) {
-            pipes.add(new Rectangle(
-                    gameWidth + pipeWIDTH + pipes.size() * pipeDistance,
-                    gameHeight - pipeHeight - groundHeight,
-                    pipeWIDTH,
-                    pipeHeight));
-
-            pipes.add(new Rectangle(
-                    gameWidth + pipeWIDTH + (pipes.size() - 1) * pipeDistance,
-                    0,
-                    pipeWIDTH,
-                    gameHeight - pipeHeight - pipeGAP));
+            addStartingPipes(pipeHeight);
         } else {
-            pipes.add(new Rectangle(
-                    pipes.getLast().x + pipeDistanceAfter,
-                    gameHeight - pipeHeight - groundHeight,
-                    pipeWIDTH,
-                    pipeHeight));
-
-            pipes.add(new Rectangle(
-                    pipes.getLast().x,
-                    0,
-                    pipeWIDTH,
-                    gameHeight - pipeHeight - pipeGAP));
+            addNextPipes(pipeHeight);
         }
+    }
+
+    /**
+     * Генерує випадкову висоту труби.
+     * @return випадкова висота труби у пікселях
+     */
+    private int generatePipeHeight() {
+        final int pipeMinHEIGHT = 50;
+        final int pipeMaxRandomHeight = 300;
+        return pipeMinHEIGHT + randomGenerator.nextInt(pipeMaxRandomHeight);
+    }
+
+    /**
+     * Додає труби для початкової сцени.
+     * @param pipeHeight отримує висоту труби
+     */
+    private void addStartingPipes(final int pipeHeight) {
+        final int pipeWIDTH = 100;
+        final int pipeGAP = 300;
+        final int groundHeight = 120;
+        final int pipeDistance = 300;
+
+        pipes.add(new Rectangle(
+                gameWidth + pipeWIDTH + pipes.size() * pipeDistance,
+                gameHeight - pipeHeight - groundHeight,
+                pipeWIDTH,
+                pipeHeight));
+
+        pipes.add(new Rectangle(
+                gameWidth + pipeWIDTH + (pipes.size() - 1) * pipeDistance,
+                0,
+                pipeWIDTH,
+                gameHeight - pipeHeight - pipeGAP));
+    }
+
+    /**
+     * Додає труби після старту гри.
+     * @param pipeHeight отримує висоту труби
+     */
+    private void addNextPipes(final int pipeHeight) {
+        final int pipeWIDTH = 100;
+        final int pipeGAP = 300;
+        final int groundHeight = 120;
+        final int pipeDistanceAfter = 600;
+
+        pipes.add(new Rectangle(
+                pipes.getLast().x + pipeDistanceAfter,
+                gameHeight - pipeHeight - groundHeight,
+                pipeWIDTH,
+                pipeHeight));
+
+        pipes.add(new Rectangle(
+                pipes.getLast().x,
+                0,
+                pipeWIDTH,
+                gameHeight - pipeHeight - pipeGAP));
     }
 
     /**
@@ -234,45 +262,71 @@ public class FlappyBirdGame
         graphics.fillRect(pipe.x, pipe.y, pipe.width, pipe.height);
     }
 
+
     /**
-     * Виконує стрибок пташки. Якщо гра завершена — перезапускає її.
-     */
+            * Виконує стрибок пташки. Якщо гра завершена — перезапускає її.
+            */
     public void jump() {
-        // Розмір пташки (ширина та висота)
-        final int birdSize = 20;
-        final int birdOffsetX = 10;              // Зсув по X від центру
-        final int birdOffsetY = 10;              // Зсув по Y від центру
-        // Сила стрибка (наскільки зменшується yMotion)
-        final int jumpStrength = 10;
-        // Кількість труб при перезапуску
-        final int initialPipesCount = 4;
-
         if (isGameOver) {
-            bird = new Rectangle(
-                    gameWidth / 2 - birdOffsetX,
-                    gameHeight / 2 - birdOffsetY,
-                    birdSize,
-                    birdSize);
-
-            pipes.clear();
-            verticalMotion = 0;
-            score = 0;
-
-            for (int i = 0; i < initialPipesCount; i++) {
-                addPipe(true);
-            }
-
-            isGameOver = false;
+            restartGame();
         }
 
         if (!isGameStarted) {
             isGameStarted = true;
         } else if (!isGameOver) {
-            if (verticalMotion > 0) {
-                verticalMotion = 0;
-            }
-            verticalMotion -= jumpStrength;
+            performJump();
         }
+    }
+
+    /**
+     * Перезапускає гру після завершення.
+     */
+    private void restartGame() {
+        bird = createBird();
+        pipes.clear();
+        verticalMotion = 0;
+        score = 0;
+
+        addInitialPipes();
+        isGameOver = false;
+    }
+
+    /**
+     * Створює нову пташку в центрі екрану.
+     * @return прямокутник, що представляє пташку
+     */
+    private Rectangle createBird() {
+        final int birdSize = 20;
+        final int birdOffsetX = 10;
+        final int birdOffsetY = 10;
+
+        return new Rectangle(
+                gameWidth / 2 - birdOffsetX,
+                gameHeight / 2 - birdOffsetY,
+                birdSize,
+                birdSize
+        );
+    }
+
+    /**
+     * Додає початкові труби.
+     */
+    private void addInitialPipes() {
+        final int initialPipesCount = 4;
+        for (int i = 0; i < initialPipesCount; i++) {
+            addPipe(true);
+        }
+    }
+
+    /**
+     * Виконує стрибок (зміна вертикального руху).
+     */
+    private void performJump() {
+        final int jumpStrength = 10;
+        if (verticalMotion > 0) {
+            verticalMotion = 0;
+        }
+        verticalMotion -= jumpStrength;
     }
 
     /**

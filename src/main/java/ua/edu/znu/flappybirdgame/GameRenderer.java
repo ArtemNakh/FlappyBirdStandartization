@@ -3,7 +3,7 @@
  */
 package ua.edu.znu.flappybirdgame;
 
-import java.awt.Graphics;
+import java.awt.*;
 import javax.swing.JPanel;
 
 /**
@@ -49,4 +49,7 @@ public class GameRenderer extends JPanel {
         super.paintComponent(graphics);
         FlappyBirdGame.getGameInstance().repaint(graphics);
     }
+
+
+
 }
