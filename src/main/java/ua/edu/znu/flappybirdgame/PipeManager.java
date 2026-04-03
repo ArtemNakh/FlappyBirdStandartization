@@ -2,6 +2,7 @@ package ua.edu.znu.flappybirdgame;
 
 import java.util.*;
 import java.awt.*;
+import java.util.List;
 
 public class PipeManager {
     private final ArrayList<Pipe> pipes = new ArrayList<>();
@@ -38,7 +39,9 @@ public class PipeManager {
         pipes.add(new Pipe(x, 0, pipeWidth, gameHeight - pipeHeight - pipeGap));
     }
 
-    public ArrayList<Pipe> getPipes() { return pipes; }
+    public List<Pipe> getPipes() {
+        return Collections.unmodifiableList(pipes);
+    }
 
     public void draw(Graphics g) {
         pipes.forEach(pipe -> pipe.draw(g));

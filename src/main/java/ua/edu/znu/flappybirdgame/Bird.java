@@ -22,7 +22,9 @@ public class Bird {
         shape.y += verticalMotion;
     }
 
-    public Rectangle getShape() { return shape; }
+    public Rectangle getShape() {
+        return new Rectangle(shape);
+    }
 
     public void reset(int x, int y, int size) {
         shape = new Rectangle(x, y, size, size);

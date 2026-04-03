@@ -10,7 +10,9 @@ public class Pipe {
     }
 
     public void move(int speed) { shape.x -= speed; }
-    public Rectangle getShape() { return shape; }
+    public Rectangle getShape() {
+        return new Rectangle(shape);
+    }
 
     public void draw(Graphics g) {
         g.setColor(Color.green.darker().darker());

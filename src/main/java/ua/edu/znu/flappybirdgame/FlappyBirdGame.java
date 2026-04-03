@@ -60,19 +60,22 @@ package ua.edu.znu.flappybirdgame;
 
 public class FlappyBirdGame {
 
-    public static FlappyBirdGame gameInstance;
+    private static FlappyBirdGame gameInstance;
     private final GameState gameState;
     private final GameWindow gameWindow;
 
     static final int gameWidth = 800;
     static final int gameHeight = 800;
 
-    public FlappyBirdGame() {
+    private FlappyBirdGame() {
         gameState = new GameState(gameWidth, gameHeight);
         gameWindow = new GameWindow(this, gameState);
     }
 
-    public static FlappyBirdGame getGameInstance() {
+    public static synchronized FlappyBirdGame getInstance() {
+        if (gameInstance == null) {
+            gameInstance = new FlappyBirdGame();
+        }
         return gameInstance;
     }
 
