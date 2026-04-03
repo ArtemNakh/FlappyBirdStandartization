@@ -1,14 +1,26 @@
 package ua.edu.znu.flappybirdgame;
 
-import javax.swing.*;
-import java.awt.*;
 
+import javax.swing.*;
+
+/** Клас {@code GameWindow} відповідає за створення та відображення
+ * основного графічного вікна гри Flappy Bird.
+ */
 public class GameWindow {
+    /** Основне вікно гри. */
     private final JFrame frame;
+
+    /** Панель рендерингу, яка відповідає за графічне відображення. */
     private final GameRenderer renderer;
+
+    /** Ігровий таймер, що керує циклом оновлення гри. */
     private final Timer gameTimer;
 
-    public GameWindow(FlappyBirdGame game, GameState state) {
+    /**Конструктор створює нове ігрове вікно.
+     * @param game  екземпляр {@link FlappyBirdGame}, який керує логікою гри
+     * @param state екземпляр {@link GameState}, що містить поточний стан гри
+     */
+    public GameWindow(final FlappyBirdGame game, final GameState state) {
         frame = new JFrame("Flappy Bird");
         renderer = new GameRenderer(state);
 
@@ -17,7 +29,6 @@ public class GameWindow {
 
         frame.add(renderer);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        frame.setSize(FlappyBirdGame.gameWidth, FlappyBirdGame.gameHeight);
         frame.setSize(800, 800);
 
         // слухачі
@@ -30,6 +41,10 @@ public class GameWindow {
         gameTimer.start();
     }
 
+    /**
+     * Виконує перемальовування ігрового вікна.
+     * Викликає метод {@link GameRenderer#repaint()}.
+     */
     public void repaint() {
         renderer.repaint();
     }

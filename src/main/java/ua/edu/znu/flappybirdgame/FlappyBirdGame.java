@@ -1,89 +1,61 @@
-//
-//
-//package ua.edu.znu.flappybirdgame;
-//
-//import java.awt.*;
-//import javax.swing.*;
-//
-//public class FlappyBirdGame {
-//
-//    public static FlappyBirdGame gameInstance;
-//    private final GameRenderer gameRenderer;
-//    private final GameState gameState;
-//    private final Timer gameTimer;
-//
-//    static final int gameWidth = 800;
-//    static final int gameHeight = 800;
-//
-//    public FlappyBirdGame() {
-//        JFrame gameWindow = new JFrame();
-//        final int timerDelay = 20;
-//        gameRenderer = new GameRenderer();
-//        gameState = new GameState(gameWidth, gameHeight);
-//
-//        gameTimer = new Timer(timerDelay, new GameLoopHandler(this));
-//
-//        gameWindow.add(gameRenderer);
-//        gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        gameWindow.setSize(gameWidth, gameHeight);
-//
-//        gameWindow.addMouseListener(new MouseInputHandler(this));
-//        gameWindow.addKeyListener(new KeyboardInputHandler(this));
-//
-//        gameWindow.setResizable(false);
-//        gameWindow.setTitle("Flappy Bird");
-//        gameWindow.setVisible(true);
-//
-//        gameTimer.start();
-//    }
-//
-//    public static FlappyBirdGame getGameInstance() {
-//        return gameInstance;
-//    }
-//
-//    public void updateGame() {
-//        gameState.update();
-//        gameRenderer.repaint();
-//    }
-//
-//    public void repaint(Graphics g) {
-//        gameState.draw(g);
-//    }
-//
-//    public void jump() {
-//        gameState.jump();
-//    }
-//}
-
-
 package ua.edu.znu.flappybirdgame;
 
-public class FlappyBirdGame {
+/**Клас {@code FlappyBirdGame}
+ * є основним керуючим класом гри Flappy Bird.
+ */
+public final class FlappyBirdGame {
 
-    private static FlappyBirdGame gameInstance;
+    /** Константа ширини ігрового поля. */
+    private static final int GAME_WIDTH = 800;
+
+    /** Константа висоти ігрового поля. */
+    private static final int GAME_HEIGHT = 800;
+
+    /** Статичний екземпляр Singleton. */
+    private static final FlappyBirdGame INSTANCE = new FlappyBirdGame();
+
+
+//    /** Єдиний екземпляр гри (Singleton). */
+//    private static FlappyBirdGame gameInstance;
+
+    /** Стан гри, що містить логіку та дані. */
     private final GameState gameState;
+
+    /** Ігрове вікно, яке відповідає за графічне відображення. */
     private final GameWindow gameWindow;
 
-    static final int gameWidth = 800;
-    static final int gameHeight = 800;
 
+    /**
+     * Приватний конструктор створює новий екземпляр гри.
+     * Ініціалізує стан гри та ігрове вікно.
+     */
     private FlappyBirdGame() {
-        gameState = new GameState(gameWidth, gameHeight);
+        gameState = new GameState(GAME_WIDTH, GAME_HEIGHT);
         gameWindow = new GameWindow(this, gameState);
     }
 
-    public static synchronized FlappyBirdGame getInstance() {
-        if (gameInstance == null) {
-            gameInstance = new FlappyBirdGame();
-        }
-        return gameInstance;
+
+    /**
+     * Повертає єдиний екземпляр гри.
+     *
+     * @return екземпляр {@link FlappyBirdGame}
+     */
+    public static FlappyBirdGame getInstance() {
+        return INSTANCE;
     }
 
+    /**
+     * Оновлює стан гри та виконує перемальовування вікна.
+     */
     public void updateGame() {
         gameState.update();
         gameWindow.repaint();
     }
 
+    /**
+     * Виконує дію стрибка пташки.
+     * Викликає метод {@link GameState#jump()}.
+     */
     public void jump() {
         gameState.jump();
     }
