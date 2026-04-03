@@ -20,8 +20,8 @@ public class PipeInstance {
     /**
      * Конструктор створює нову трубу із заданими координатами та розмірами.
      *
-     * @param xPos      координата X верхнього лівого кута труби
-     * @param yPos      координата Y верхнього лівого кута труби
+     * @param xPos       координата X верхнього лівого кута труби
+     * @param yPos       координата Y верхнього лівого кута труби
      * @param widthPipe  ширина труби
      * @param heightPipe висота труби
      */
@@ -33,7 +33,7 @@ public class PipeInstance {
      * Перевіряє, чи перетинається труба з пташкою.
      *
      * @param birdInstance екземпляр {@link BirdInstance},
-     *                    з яким перевіряється зіткнення
+     *                     з яким перевіряється зіткнення
      * @return {@code true}, якщо є перетин; {@code false} інакше
      */
     public boolean intersects(final BirdInstance birdInstance) {
@@ -59,14 +59,26 @@ public class PipeInstance {
     }
 
     /**
+     * перевіряє птаха у ігровій зоні.
+     * @param currentBird текущий птах
+     */
+    public boolean isBirdInScoreZone(final BirdInstance currentBird) {
+        final int scoreZoneOffset = 10;
+        return isTopPipe()
+                && currentBird.getCenterX() > getCenterX() - scoreZoneOffset
+                && currentBird.getCenterX() < getCenterX() + scoreZoneOffset;
+    }
+
+    /**
      * Повертає значення X труби.
      */
     public int getX() {
         return shape.x;
     }
-/**
-            * Повертає значення ширини труби.
-            */
+
+    /**
+     * Повертає значення ширини труби.
+     */
     public int getWidth() {
         return shape.width;
     }

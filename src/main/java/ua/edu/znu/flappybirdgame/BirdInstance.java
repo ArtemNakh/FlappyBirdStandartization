@@ -22,13 +22,14 @@ public class BirdInstance {
     /**
      * Конструктор створює нову пташку із заданими координатами та розміром.
      *
-     * @param xPos    початкова координата X
-     * @param yPos    початкова координата Y
+     * @param xPos     початкова координата X
+     * @param yPos     початкова координата Y
      * @param sizeBird розмір пташки (ширина та висота)
      */
-    public BirdInstance(final int xPos, final  int yPos, final  int sizeBird) {
+    public BirdInstance(final int xPos, final int yPos, final int sizeBird) {
         shape = new Rectangle(xPos, yPos, sizeBird, sizeBird);
     }
+
     /**
      * Повертає координату X центру об'єкта.
      *
@@ -75,6 +76,13 @@ public class BirdInstance {
     }
 
     /**
+     * Перевірка за виход зони.
+     */
+    public boolean isOutOfBounds(int gameHeight) {
+        return getY() > gameHeight - 120 || getY() < 0;
+    }
+
+    /**
      * Повертає копію геометричної форми пташки.
      * Використовується для перевірки зіткнень.
      *
@@ -87,8 +95,8 @@ public class BirdInstance {
     /**
      * Скидає стан пташки до початкових координат і розміру.
      *
-     * @param xPos    нова координата X
-     * @param yPos    нова координата Y
+     * @param xPos     нова координата X
+     * @param yPos     нова координата Y
      * @param sizeBird новий розмір пташки
      */
     public void reset(final int xPos, final int yPos, final int sizeBird) {

@@ -64,6 +64,9 @@ public class GameState {
         reset();
     }
 
+
+
+
     /**
      * Скидає стан гри до початкового.
      * Створює нову пташку, обнуляє очки та лічильники.
@@ -94,35 +97,41 @@ public class GameState {
     }
 
 
-    /**
-     * Оновлює стан гри на кожному такті.
-     */
     public void update() {
         ticksCount++;
-        if (!isGameStarted) {
-            return;
-        }
+        if (!isGameStarted) return;
 
-        pipeManager.update();
+        updateBird();
+        updatePipes();
+        checkCollisions();
+        checkOutOfBounds();
+    }
+
+    private void updateBird() {
         birdInstance.fall(2, 15, ticksCount);
+    }
 
-        for (final PipeInstance pipeInstance : pipeManager.getPipes()) {
-            if (pipeInstance.intersects(birdInstance)) {
+    private void updatePipes() {
+        pipeManager.update();
+    }
+
+    private void checkCollisions() {
+        for (PipeInstance pipe : pipeManager.getPipes()) {
+            if (pipe.intersects(birdInstance)) {
                 isGameOver = true;
             }
-
-            final int scoreZoneOffset = 10;
-            if (pipeInstance.isTopPipe()
-                    && birdInstance.getCenterX() > pipeInstance.getCenterX() - scoreZoneOffset
-                    && birdInstance.getCenterX() < pipeInstance.getCenterX() + scoreZoneOffset) {
+            if (pipe.isBirdInScoreZone(birdInstance)) {
                 scoreManager.increment();
             }
         }
+    }
 
-        if (birdInstance.getY() > gameHeight - 120 || birdInstance.getY() < 0) {
+    private void checkOutOfBounds() {
+        if (birdInstance.isOutOfBounds(gameHeight)) {
             isGameOver = true;
         }
     }
+
 
 
     /**
@@ -131,29 +140,41 @@ public class GameState {
      * @param graphics графічний контекст для малювання
      */
     public void draw(final Graphics graphics) {
+        drawBackground(graphics);
+        drawGround(graphics);
+        drawGameObjects(graphics);
+        drawText(graphics);
+    }
+
+    private void drawBackground(Graphics graphics) {
         graphics.setColor(Color.cyan);
         graphics.fillRect(0, 0, gameWidth, gameHeight);
+    }
 
+    private void drawGround(Graphics graphics) {
         graphics.setColor(Color.orange);
         graphics.fillRect(0, gameHeight - 120, gameWidth, 120);
 
         graphics.setColor(Color.green);
         graphics.fillRect(0, gameHeight - 120, gameWidth, 20);
+    }
 
+    private void drawGameObjects(Graphics graphics) {
         birdInstance.draw(graphics);
         pipeManager.draw(graphics);
+    }
 
+    private void drawText(Graphics graphics) {
         graphics.setColor(Color.white);
         graphics.setFont(new Font("Arial", Font.BOLD, 80));
 
         if (!isGameStarted) {
             graphics.drawString("Click to Begin", 75, gameHeight / 2 - 50);
-        }
-        if (isGameOver) {
+        } else if (isGameOver) {
             graphics.drawString("Game Over", 100, gameHeight / 2 - 50);
-        }
-        if (!isGameOver && isGameStarted) {
+        } else {
             graphics.drawString(String.valueOf(scoreManager.getScore()), gameWidth / 2 - 25, 100);
         }
     }
+
 }
