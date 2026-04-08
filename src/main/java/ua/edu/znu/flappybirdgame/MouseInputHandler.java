@@ -13,12 +13,12 @@ public class MouseInputHandler extends MouseAdapter {
     /**
      * Конструктор створює новий обробник миші.
      *
-     * @param game екземпляр {@link FlappyBirdGame},
+     * @param newGame екземпляр {@link FlappyBirdGame},
      *            який буде оновлюватися при кліку миші
      */
-    public MouseInputHandler(final FlappyBirdGame game) {
+    public MouseInputHandler(final FlappyBirdGame newGame) {
         super();
-        this.game = game;
+        this.game = newGame;
     }
 
     /**
@@ -28,7 +28,7 @@ public class MouseInputHandler extends MouseAdapter {
      * @param event подія миші
      */
     @Override
-    public void mouseClicked(MouseEvent event) {
+    public void mouseClicked(final MouseEvent event) {
         game.jump();
     }
 }

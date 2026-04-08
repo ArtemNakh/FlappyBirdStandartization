@@ -1,20 +1,19 @@
 package ua.edu.znu.flappybirdgame;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
- * Клас {@code Pipe} представляє трубу у грі Flappy Bird.
+ * Клас {@code PipeInstance} представляє трубу у грі Flappy Bird.
  * <p>
- * Він відповідає за геометричну форму труби, її рух та відображення
+ * Відповідає за геометричну форму труби, її рух та відображення
  * на графічному контексті. Труби використовуються для створення перешкод,
  * які гравець має долати.
  * </p>
  */
 public class PipeInstance {
-    /**
-     * Геометрична форма труби, яка
-     * використовується для відображення та перевірки зіткнень.
-     */
+    /** Геометрична форма труби. */
     private final Rectangle shape;
 
     /**
@@ -25,7 +24,8 @@ public class PipeInstance {
      * @param widthPipe  ширина труби
      * @param heightPipe висота труби
      */
-    public PipeInstance(final int xPos, final int yPos, final int widthPipe, final int heightPipe) {
+    public PipeInstance(final int xPos, final int yPos,
+                        final int widthPipe, final int heightPipe) {
         shape = new Rectangle(xPos, yPos, widthPipe, heightPipe);
     }
 
@@ -37,7 +37,7 @@ public class PipeInstance {
      * @return {@code true}, якщо є перетин; {@code false} інакше
      */
     public boolean intersects(final BirdInstance birdInstance) {
-        return shape.intersects(birdInstance.getShape());
+        return birdInstance.intersects(this.shape);
     }
 
     /**
@@ -59,25 +59,30 @@ public class PipeInstance {
     }
 
     /**
-     * перевіряє птаха у ігровій зоні.
-     * @param currentBird текущий птах
+     * Перевіряє, чи знаходиться птах у зоні нарахування очок.
+     *
+     * @param currentBird поточний птах
+     * @return {@code true}, якщо птах у зоні очок; {@code false} інакше
      */
     public boolean isBirdInScoreZone(final BirdInstance currentBird) {
         final int scoreZoneOffset = 10;
         return isTopPipe()
-                && currentBird.getCenterX() > getCenterX() - scoreZoneOffset
-                && currentBird.getCenterX() < getCenterX() + scoreZoneOffset;
+                && currentBird.isInScoreZone(getCenterX(), scoreZoneOffset);
     }
 
     /**
-     * Повертає значення X труби.
+     * Повертає координату X труби.
+     *
+     * @return значення X труби
      */
     public int getX() {
         return shape.x;
     }
 
     /**
-     * Повертає значення ширини труби.
+     * Повертає ширину труби.
+     *
+     * @return ширина труби
      */
     public int getWidth() {
         return shape.width;
@@ -109,7 +114,7 @@ public class PipeInstance {
      * @param graphics графічний контекст для малювання
      */
     public void draw(final Graphics graphics) {
-        graphics.setColor(Color.green.darker().darker());
+        graphics.setColor(Color.GREEN.darker().darker());
         graphics.fillRect(shape.x, shape.y, shape.width, shape.height);
     }
 }
